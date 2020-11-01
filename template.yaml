@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  secret-app
+
+  SAM Template for secret-app
+  
+Globals:
+  Function:
+    Timeout: 15
+
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: hello-world/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        - Statement:
+          - Sid: SecretManagerReadPolicy
+            Effect: Allow
+            Action:
+              - secretsmanager:GetSecretValue
+            Resource: $YOUR_SECRET_ARN_HERE
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
